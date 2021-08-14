@@ -38,18 +38,17 @@ solve_t* populateOptions(board_t *board, bool solvable) {
         0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0xf1,
     };
 
-    options_t opts = {};
+    solve_t solver = {};
+    solve_t *s_ptr = &solver;
+    
     // clear all options initially:
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             for (int k = 0; k < n; k++) {
-                opts.opts[i][j][k] = 0;
+                solver.opts.opts[i][j][k] = 0;
             }
         }
     }
-
-    solve_t solver = {};
-    solve_t *s_ptr = &solver;
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -72,7 +71,7 @@ solve_t* populateOptions(board_t *board, bool solvable) {
                 bool boxPresent = checkBox(board, i, j, opt);
 
                 if (!rowPresent && !columnPresent && !boxPresent) {
-                    opts.opts[i][j][count] = opt;
+                    solver.opts.opts[i][j][count] = opt;
                     count++;
                 }
             }
@@ -88,7 +87,6 @@ solve_t* populateOptions(board_t *board, bool solvable) {
     }
 
     solver.board = board;
-    solver.opts = opts;
     solver.solvable = solvable;
 
     return s_ptr;
@@ -100,15 +98,12 @@ void solveEntries(solve_t *s) {
         return;
     }
 
-    s->solvable = false;
-
     board_t *board = s->board;
     if (!board) {
         return;
     }
 
-    bool solvable = s->solvable;
-
+    bool solvable = false;
     int n = board->size;
 
     for (int i = 0; i < n; i++) {
@@ -124,10 +119,9 @@ void solveEntries(solve_t *s) {
             for (int k = 0; k < n; k++) {
                 int opt = s->opts.opts[i][j][k];
 
-                if (opt == 0) {
+                if (!opt) {
                     continue;
                 }
-
                 numOpts++;
                 lastOpt = opt;
             }

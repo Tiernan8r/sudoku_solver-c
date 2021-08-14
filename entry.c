@@ -7,9 +7,6 @@ char toChar(int e) {
     char val = ' ';
 
     switch (e) {
-        // case 0:
-        //     val = '0';
-        //     break;
         case 1:
             val = '1';
             break;
