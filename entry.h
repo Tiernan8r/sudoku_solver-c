@@ -2,6 +2,7 @@
     #define _ENTRY_H
     
     #include <stdio.h>
+    #include <strings.h>
 
     typedef struct {
         int entries[16][16];
