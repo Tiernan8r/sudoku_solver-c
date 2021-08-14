@@ -1,6 +1,6 @@
 TARGET=solver
 
-VALUES_DEFINITIONS=types/value.c types/entry.c types/grid.c
+VALUES_DEFINITIONS=entry.c
 OUTPUTS=output.c
 INPUTS=input.c
 SRC=main.c solve.c ${VALUES_DEFINITIONS} ${INPUTS} ${OUTPUTS}

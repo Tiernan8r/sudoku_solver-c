@@ -1,37 +1,39 @@
 #include "main.h"
 
-grid_t testGrid();
+board_t* testBoard();
 
 int main() {
     // Read in the input
     printf("READING INPUT:\n");
-    grid_t *g_ptr = read(stdin);
-    if (!g_ptr) {
+    board_t *b_ptr = read(stdin);
+    if (!b_ptr) {
         return 1;
     }
 
-    grid_t g = *g_ptr;
+    board_t b = *b_ptr;
     // Calculate options for each entry
 
     // solve
 
     // output
-    // grid_t g = makeEmptyGrid(9);
-    // grid_t g = testGrid();
+    // board_t b = makeEmptyBoard(9);
+    // board_t b = testBoard();
+    // b_ptr = testBoard();
 
     printf("INPUT:\n");
-    drawTable(g);
+    drawTable(b);
 
-    g = solve(g);
+    printf("SOLVING...\n");
+    b = solve(b);
 
     printf("OUTPUT:\n");
-    drawTable(g);
+    drawTable(b);
 
     return 0;
 }
 
-grid_t testGrid() {
-    // make a test 9*9 grid:
+board_t* testBoard() {
+    // make a test 9*9 board:
     //   0   1   2   3   4   5   6   7   8
     // +---+---+---+---+---+---+---+---+---+
     // | 6 | 4 |   |   | 3 |   |   |   | 7 | 0
@@ -52,99 +54,50 @@ grid_t testGrid() {
     // +---+---+---+---+---+---+---+---+---+
     // | 7 | 5 |   |   |   |   |   | 9 | 6 | 8
     // +---+---+---+---+---+---+---+---+---+
-    entry_t e = {
-        empty,
-        {},
-        0,
-    };
-
-    grid_t g = {
+    board_t b = {
         {
             // row 0:
             {
-                {six, {}, 1,},
-                {four, {}, 1,},
-                e, e,
-                {three, {}, 1,},
-                e, e, e,
-                {seven, {}, 1,},
+                6,4,0,0,3,0,0,0,7,
             },
             // row 1:
             {
-                {five, {}, 1,},
-                e,
-                {one, {}, 1,},
-                e,
-                {seven, {}, 1,},
-                e,
-                {nine, {},1,},
-                e,e,
+                5,0,1,0,7,0,9,0,0,
             },
             // row 2:
             {
-                e,e,e,e,e,e,
-                {one, {}, 1,},
-                e,e,
+                0,0,0,0,0,0,0,1,0,
             },
             // row 3
             {
-                e,e,
-                {four, {}, 1,},
-                {nine, {}, 1,},
-                e,
-                {eight, {}, 1,},
-                e,
-                {six, {}, 1,},
-                e,
+                0,0,4,9,0,8,0,6,0,
             },
             // row 4
             {
-                e,
-                {eight, {}, 1,},
-                e,e,e,
-                {three, {}, 1,},
-                e,
-                {two, {}, 1,},
-                e,
+                0,8,0,0,0,3,0,2,0,
             },
             // row 5
             {
-                e, e, e,
-                {four, {}, 1,},
-                e, e, e, e, e,
+                0,0,0,4,0,0,0,0,0,
             },
             // row 6:
             {
-                {four, {}, 1,},
-                e, e,
-                {one, {}, 1,},
-                {five, {}, 1,},
-                {seven, {}, 1,},
-                e,
-                {three, {}, 1,},
-                e,
+                4,0,0,1,5,7,0,3,0,
             },
             // row 7
             {
-                {two, {}, 1,},
-                e,
-                {eight, {}, 1,},
-                {three, {}, 1,},
-                e, e, e,
-                {four, {}, 1,},
-                e,
+                2,0,8,3,0,0,0,4,0,
             },
             // row 8
             {
-                {seven, {}, 1,},
-                {five, {}, 1,},
-                e, e, e, e, e,
-                {nine, {}, 1,},
-                {six, {}, 1,},
+                7,5,0,0,0,0,0,9,6,
             },
         },
         9,
     };
 
-    return g;
+    board_t *b_ptr = &b;
+    return b_ptr;
+
+    // return b;
 }

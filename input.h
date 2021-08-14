@@ -4,7 +4,7 @@
     #include <math.h>
     #include <stdio.h>
     #include <stdlib.h>
-    #include "types/grid.h"
+    #include "entry.h"
 
-    grid_t* read(FILE *f);
+    board_t* read(FILE *f);
 #endif

@@ -1,58 +1,62 @@
-// Defines the values of the sudoku gird, and how to display them.
-#include "value.h"
-#include <stdio.h>
+#include "entry.h"
 
-char getChar(value_t v) {
+const int SMALL_TABLE = 9;
+const int BIG_TABLE = 16;
+
+char toChar(int e) {
     char val = ' ';
 
-    switch (v) {
-        case zero:
-            val = '0';
-            break;
-        case one:
+    switch (e) {
+        // case 0:
+        //     val = '0';
+        //     break;
+        case 1:
             val = '1';
             break;
-        case two:
+        case 2:
             val = '2';
             break;
-        case three:
+        case 3:
             val = '3';
             break;
-        case four:
+        case 4:
             val = '4';
             break;
-        case five:
+        case 5:
             val = '5';
             break;
-        case six:
+        case 6:
             val = '6';
             break;
-        case seven:
+        case 7:
             val = '7';
             break;
-        case eight:
+        case 8:
             val = '8';
             break;
-        case nine:
+        case 9:
             val = '9';
             break;
-        case a:
+        case 0xa:
             val = 'A';
             break;
-        case b:
+        case 0xb:
             val = 'B';
             break;
-        case c:
+        case 0xc:
             val = 'C';
             break;
-        case d:
+        case 0xd:
             val = 'D';
             break;
-        case e:
+        case 0xe:
             val = 'E';
             break;
-        case f:
+        case 0xf:
             val = 'F';
+            break;
+        case 0xf1:
+            val = '0';
             break;
         default:
             break;
@@ -61,75 +65,75 @@ char getChar(value_t v) {
     return val;
 }
 
-value_t getVal(char c) {
-    value_t val = empty;
+int fromChar(char c) {
+    int val = 0;
 
     switch (c) {
         case '0':
-            val = zero;
+            val = 17;
             break;
         case '1':
-            val = one;
+            val = 1;
             break;
         case '2':
-            val = two;
+            val = 2;
             break;
         case '3':
-            val = three;
+            val = 3;
             break;
         case '4':
-            val = four;
+            val = 4;
             break;
         case '5':
-            val = five;
+            val = 5;
             break;
         case '6':
-            val = six;
+            val = 6;
             break;
         case '7':
-            val = seven;
+            val = 7;
             break;
         case '8':
-            val = eight;
+            val = 8;
             break;
         case '9':
-            val = nine;
+            val = 9;
             break;
         case 'a':
-            val = a;
+            val = 0xa;
             break;
         case 'A':
-            val = a;
+            val = 0xa;
             break;
         case 'b':
-            val = b;
+            val = 0xb;
             break;
         case 'B':
-            val = b;
+            val = 0xb;
             break;
         case 'c':
-            val = c;
+            val = 0xc;
             break;
         case 'C':
-            val = c;
+            val = 0xc;
             break;
         case 'd':
-            val = d;
+            val = 0xd;
             break;
         case 'D':
-            val = d;
+            val = 0xd;
             break;
         case 'e':
-            val = e;
+            val = 0xe;
             break;
         case 'E':
-            val = e;
+            val = 0xe;
             break;
         case 'f':
-            val = f;
+            val = 0xf;
             break;
         case 'F':
-            val = f;
+            val = 0xf;
             break;
         default:
             break;

@@ -1,200 +1,206 @@
-// Displays the grid as a table
 #include "solve.h"
 
-int populateOptions(grid_t *grid);
-int solveEntries(grid_t *grid);
+extern const int BIG_TABLE;
+extern const int SMALL_TABLE;
 
-int checkRow(grid_t *grid, int j, value_t v);
-int checkColumn(grid_t *grid, int i, value_t v);
-int checkBox(grid_t *grid, int i, int j, value_t v);
+const int T = true;
+const int F = false;
 
-grid_t solve(grid_t grid) {
+board_t solve(board_t board) {
     // 1. populate intial options
     // 2. eliminate/solve entries with only 1 option
     //      if none -> exit
     // 3. recalculate options
     // 4. repeat #2->#3 until all solved.
+    bool solvable = true;
 
-    int populateSolvable = 1;
-    int eliminateSolvable = 1;
-
-    int count = 0;
     do {
-        count++;
+        solve_t *s_ptr = populateOptions(&board, solvable);
 
-        populateSolvable = populateOptions(&grid);
-        eliminateSolvable = solveEntries(&grid);
-    } while (populateSolvable && eliminateSolvable);
+        solveEntries(s_ptr);
 
-    return grid;
+        solvable = s_ptr->solvable;
+    } while(solvable);
+
+    return board;
 }
 
-// Fills out the options arrays in each grid entry, based on the solved values in the
-// grid.
-int populateOptions(grid_t *grid) {
-    int solvable = 0;
+// Fills out the options arrays in each board entry, based on the solved values in the
+// board.
+solve_t* populateOptions(board_t *board, bool solvable) {
+    solvable = false;
+    if (!board) {
+        return NULL;
+    }
 
-    value_t allOpts[16] = {
-        one, two, three, four, five, six, seven, eight, nine, a, b, c, d, e, f, zero,
+    int n = board->size;
+    int allOpts[16] = {
+        0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0xf1,
     };
 
-    for (int i = 0; i < grid->size; i++) {
-        for (int j = 0; j < grid->size; j++) {
-            entry_t e = grid->vals[i][j];
-
-            if (e.solved) {
-                continue;
+    options_t opts = {};
+    // clear all options initially:
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
+                opts.opts[i][j][k] = 0;
             }
+        }
+    }
 
-            value_t *opts = malloc(grid->size * sizeof(value_t));
-            for (int i = 0; i < grid->size; i++) {
-                opts[i] = empty;
+    solve_t solver = {};
+    solve_t *s_ptr = &solver;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int e = board->entries[i][j];
+
+            // Any non-zero value is considered solved...
+            if (e) {
+                continue;
             }
 
             int count = 0;
             // iterate over all values except the entries actual value:
             // can do a bit of logic on 9*9 v 16*16.
             // check row, column, box for val, if not found, add as option. 
-            for (int k = 0; k < grid->size; k++) {
-                value_t opt = allOpts[k];
+            for (int k = 0; k < n; k++) {
+                int opt = allOpts[k];
 
-                int rowPresent = checkRow(grid, j, opt);
-                int columnPresent = checkColumn(grid, i, opt);
-                int boxPresent = checkBox(grid, i, j, opt);
+                bool rowPresent = checkRow(board, j, opt);
+                bool columnPresent = checkColumn(board, i, opt);
+                bool boxPresent = checkBox(board, i, j, opt);
 
-                if (!(rowPresent || columnPresent || boxPresent)) {
-                    opts[count] = opt;
+                if (!rowPresent && !columnPresent && !boxPresent) {
+                    opts.opts[i][j][count] = opt;
                     count++;
                 }
             }
 
             // make sure there is atleast one option available, otherwise the
-            // grid is unsolvable
+            // board is unsolvable
             if (count < 1) {
                 continue;
             }
 
-            entry_t *newEntry = malloc(sizeof(entry_t));
-            newEntry->solved=0;
-            newEntry->val = grid->vals[i][j].val;
-    
-            for (int x = 0; x < count; x++) {
-                newEntry->options[x] = opts[x];
-            }
-
-            grid->vals[i][j] = *newEntry;
-            solvable = 1;
+            solvable = true;
         }
     }
 
-    return solvable;
+    solver.board = board;
+    solver.opts = opts;
+    solver.solvable = solvable;
+
+    return s_ptr;
 }
 
 // Finds any entries with only one option and marks the entry as solved.
-int solveEntries(grid_t *grid) {
-    int solvable = 0;
+void solveEntries(solve_t *s) {
+    if (!s) {
+        return;
+    }
 
-    for (int i = 0; i < grid->size; i++) {
-        for (int j = 0; j < grid->size; j++) {
-            entry_t entry = grid->vals[i][j];
-            if (entry.solved) {
+    s->solvable = false;
+
+    board_t *board = s->board;
+    if (!board) {
+        return;
+    }
+
+    bool solvable = s->solvable;
+
+    int n = board->size;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int entry = board->entries[i][j];
+            if (entry) {
                 continue;
             }
 
-            int totalOptions = sizeof(entry.options) / sizeof(entry.options[0]);
+            int numOpts = 0;
+            int lastOpt = 0;
 
-            int numOptions = 0;
-            value_t lastOption = empty;
+            for (int k = 0; k < n; k++) {
+                int opt = s->opts.opts[i][j][k];
 
-            for (int k = 0; k < totalOptions; k++) {
-                value_t opt = entry.options[k];
-                if (opt == empty) {
+                if (opt == 0) {
                     continue;
                 }
 
-                numOptions++;
-                lastOption = opt;
+                numOpts++;
+                lastOpt = opt;
             }
 
-            if (numOptions == 1) {
-                entry_t newEntry = {
-                    lastOption,
-                    {},
-                    1,
-                };
+            if (numOpts == 1) {
+                board->entries[i][j] = lastOpt;
 
-                grid->vals[i][j] = newEntry;
-
-                solvable = 1;
+                solvable = true;
             }
         }
     }
 
-    return solvable;
+    s->solvable = solvable;
+
+    return;
 }
 
 // Checks the rows of the given index to see if value 'v' is present in
-// any, returns 1 if so.
-int checkRow(grid_t *grid, int j, value_t v) {
-    if (grid == NULL) {
-        return 0;
+// any, returns true if value is present.
+bool checkRow(board_t *board, int j, int v) {
+    if (!board) {
+        return false;
     }
 
-    for (int i = 0; i < grid->size; i++) {
-        entry_t entry = grid->vals[i][j];
+    for (int i = 0; i < board->size; i++) {
+        int entry = board->entries[i][j];
 
-        if (entry.solved) {
-            if (entry.val == v) {
-                return 1;
-            }
+        if (entry && entry == v) {
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
 // Checks the columns of the given index to see if value 'v' is present in
-// any, returns 1 if so.
-int checkColumn(grid_t *grid, int i, value_t v) {
-    if (grid == NULL) {
-        return 0;
+// any, returns true if value is present.
+bool checkColumn(board_t *board, int i, int v) {
+    if (!board) {
+        return false;
     }
 
-    for (int j = 0; j < grid->size; j++) {
-        entry_t entry = grid->vals[i][j];
+    for (int j = 0; j < board->size; j++) {
+        int entry = board->entries[i][j];
 
-        if (entry.solved) {
-            if (entry.val == v) {
-                return 1;
-            }
+        if (entry && entry == v) {
+            return true;
         }
     }
 
-    return 0;
+    return false;
 }
 
-// Checks the n*n box the entry lives in for value 'v' if present, returns 1 if so.
-int checkBox(grid_t *grid, int i, int j, value_t v) {
-    if (grid == NULL) {
-        return 0;
+// Checks the n*n box the entry lives in for value 'v' if present, returns true if so.
+bool checkBox(board_t *board, int i, int j, int v) {
+    if (!board) {
+        return false;
     }
 
-    int n = (int) sqrt(grid->size);
+    int n = (int) sqrt(board->size);
 
     int minX = floor(i / n) * n;
     int minY = floor(j / n) * n;
 
     for (int x = minX; x < minX + n; x++) {
         for (int y = minY; y < minY + n; y++) {
-            entry_t entry = grid->vals[x][y];
+            int entry = board->entries[x][y];
 
-            if (entry.solved) {
-                if (entry.val == v) {
-                    return 1;
-                }    
+            if (entry && entry == v) {
+                return true;
             }
         }
     }
 
-    return 0;
+    return false;
 }
