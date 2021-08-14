@@ -1,9 +1,6 @@
 TARGET=solver
 
-VALUES_DEFINITIONS=entry.c
-OUTPUTS=output.c
-INPUTS=input.c
-SRC=main.c solve.c ${VALUES_DEFINITIONS} ${INPUTS} ${OUTPUTS}
+SRC=main.c solve.c entry.c input.c output.c
 
 LINKS=-lm
 
@@ -17,9 +14,3 @@ clear:
 
 $(TARGET): ${SRC}
 	${CC} -o ${TARGET} ${SRC} ${LINKS}
-
-output: ${OUTPUTS}
-	${CC} -o table_output ${OUTPUTS}
-
-input: ${INPUTS}
-	${CC} -o table_input ${INPUTS}
