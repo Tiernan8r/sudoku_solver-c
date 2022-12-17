@@ -28,9 +28,6 @@
 extern const int BIG_TABLE;
 extern const int SMALL_TABLE;
 
-// Handles reading in the input of the grid:
-board_t *parseTable(char *s, int size);
-
 // Reads the entire file input as follows:
 // any 0,1,2...9,a...f is read as an entry in the
 // grid, any ' ' chars are empty entries, and '\n' are ignored.

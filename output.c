@@ -81,5 +81,5 @@ void drawTable(board_t board)
     // Add the final bottom row separator
     strcat(table, row);
 
-    printf(table);
+    printf("%s", table);
 }
