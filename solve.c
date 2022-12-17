@@ -56,15 +56,15 @@ board_t solve(board_t board)
 
 // Fills out the options arrays in each board entry, based on the solved values in the
 // board.
-solve_t *populateOptions(board_t *board, bool solvable)
+solve_t *populateOptions(board_t *board_ptr, bool solvable)
 {
     solvable = false;
-    if (!board)
+    if (!board_ptr)
     {
         return NULL;
     }
 
-    int n = board->size;
+    int n = board_ptr->size;
     int allOpts[16] = {
         0x1,
         0x2,
@@ -103,7 +103,7 @@ solve_t *populateOptions(board_t *board, bool solvable)
     {
         for (int j = 0; j < n; j++)
         {
-            int e = board->entries[i][j];
+            int e = board_ptr->entries[i][j];
 
             // Any non-zero value is considered solved...
             if (e)
@@ -119,9 +119,9 @@ solve_t *populateOptions(board_t *board, bool solvable)
             {
                 int opt = allOpts[k];
 
-                bool rowPresent = checkRow(board, j, opt);
-                bool columnPresent = checkColumn(board, i, opt);
-                bool boxPresent = checkBox(board, i, j, opt);
+                bool rowPresent = checkRow(board_ptr, j, opt);
+                bool columnPresent = checkColumn(board_ptr, i, opt);
+                bool boxPresent = checkBox(board_ptr, i, j, opt);
 
                 if (!rowPresent && !columnPresent && !boxPresent)
                 {
@@ -141,34 +141,34 @@ solve_t *populateOptions(board_t *board, bool solvable)
         }
     }
 
-    solver.board = board;
+    solver.board_ptr = board_ptr;
     solver.solvable = solvable;
 
     return s_ptr;
 }
 
 // Finds any entries with only one option and marks the entry as solved.
-void solveEntries(solve_t *s)
+void solveEntries(solve_t *s_ptr)
 {
-    if (!s)
+    if (!s_ptr)
     {
         return;
     }
 
-    board_t *board = s->board;
-    if (!board)
+    board_t *board_ptr = s_ptr->board_ptr;
+    if (!board_ptr)
     {
         return;
     }
 
     bool solvable = false;
-    int n = board->size;
+    int n = board_ptr->size;
 
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            int entry = board->entries[i][j];
+            int entry = board_ptr->entries[i][j];
             if (entry)
             {
                 continue;
@@ -179,7 +179,7 @@ void solveEntries(solve_t *s)
 
             for (int k = 0; k < n; k++)
             {
-                int opt = s->opts.opts[i][j][k];
+                int opt = s_ptr->opts.opts[i][j][k];
 
                 if (!opt)
                 {
@@ -191,30 +191,30 @@ void solveEntries(solve_t *s)
 
             if (numOpts == 1)
             {
-                board->entries[i][j] = lastOpt;
+                board_ptr->entries[i][j] = lastOpt;
 
                 solvable = true;
             }
         }
     }
 
-    s->solvable = solvable;
+    s_ptr->solvable = solvable;
 
     return;
 }
 
 // Checks the rows of the given index to see if value 'v' is present in
 // any, returns true if value is present.
-bool checkRow(board_t *board, int j, int v)
+bool checkRow(board_t *board_ptr, int j, int v)
 {
-    if (!board)
+    if (!board_ptr)
     {
         return false;
     }
 
-    for (int i = 0; i < board->size; i++)
+    for (int i = 0; i < board_ptr->size; i++)
     {
-        int entry = board->entries[i][j];
+        int entry = board_ptr->entries[i][j];
 
         if (entry && entry == v)
         {
@@ -227,16 +227,16 @@ bool checkRow(board_t *board, int j, int v)
 
 // Checks the columns of the given index to see if value 'v' is present in
 // any, returns true if value is present.
-bool checkColumn(board_t *board, int i, int v)
+bool checkColumn(board_t *board_ptr, int i, int v)
 {
-    if (!board)
+    if (!board_ptr)
     {
         return false;
     }
 
-    for (int j = 0; j < board->size; j++)
+    for (int j = 0; j < board_ptr->size; j++)
     {
-        int entry = board->entries[i][j];
+        int entry = board_ptr->entries[i][j];
 
         if (entry && entry == v)
         {
@@ -248,14 +248,14 @@ bool checkColumn(board_t *board, int i, int v)
 }
 
 // Checks the n*n box the entry lives in for value 'v' if present, returns true if so.
-bool checkBox(board_t *board, int i, int j, int v)
+bool checkBox(board_t *board_ptr, int i, int j, int v)
 {
-    if (!board)
+    if (!board_ptr)
     {
         return false;
     }
 
-    int n = (int)sqrt(board->size);
+    int n = (int)sqrt(board_ptr->size);
 
     int minX = floor(i / n) * n;
     int minY = floor(j / n) * n;
@@ -264,7 +264,7 @@ bool checkBox(board_t *board, int i, int j, int v)
     {
         for (int y = minY; y < minY + n; y++)
         {
-            int entry = board->entries[x][y];
+            int entry = board_ptr->entries[x][y];
 
             if (entry && entry == v)
             {

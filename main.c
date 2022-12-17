@@ -26,8 +26,6 @@
 #include "output.h"
 #include "main.h"
 
-board_t *testBoard();
-
 int main()
 {
     // Read in the input
