@@ -1,5 +1,5 @@
-#ifndef _SOLVE_H
-    #define _SOLVE_H
+#ifndef SOLVE_H
+    #define SOLVE_H
 
     #include <math.h>
     #include <stdbool.h>

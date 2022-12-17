@@ -1,5 +1,5 @@
-#ifndef _OUTPUT_H
-    #define _OUTPUT_H
+#ifndef OUTPUT_H
+    #define OUTPUT_H
 
     #include <stdio.h>
     #include <string.h>

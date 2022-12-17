@@ -1,5 +1,5 @@
-#ifndef _ENTRY_H
-    #define _ENTRY_H
+#ifndef ENTRY_H
+    #define ENTRY_H
     
     #include <stdio.h>
     #include <strings.h>
