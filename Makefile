@@ -1,6 +1,6 @@
 TARGET=solver
 
-SRC=main.c solve.c entry.c input.c output.c
+SRC=main.c solve.c check.c entry.c input.c output.c
 
 LINKS=-lm
 

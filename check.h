@@ -19,24 +19,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef SOLVE_H
-    #define SOLVE_H
+#ifndef CHECK_H
+    #define CHECK_H
 
     #include <stdbool.h>
     #include "entry.h"
 
-    typedef struct {
-        int opts[16][16][16];
-    } options_t;
-
-    typedef struct {
-        board_t *board_ptr;
-        options_t opts;
-        bool solvable;
-    } solve_t;
-
-    board_t solve(board_t board);
-
-    solve_t* populateOptions(board_t *board_ptr, bool solvable);
-    void solveEntries(solve_t *s);
+    bool checkRow(board_t *board_ptr, int j, int v);
+    bool checkColumn(board_t *board_ptr, int i, int v);
+    bool checkBox(board_t *board_ptr, int i, int j, int v);
 #endif

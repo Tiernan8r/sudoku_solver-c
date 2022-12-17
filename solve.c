@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "entry.h"
+#include "check.h"
 #include "solve.h"
 
 extern const int BIG_TABLE;
@@ -201,77 +202,4 @@ void solveEntries(solve_t *s_ptr)
     s_ptr->solvable = solvable;
 
     return;
-}
-
-// Checks the rows of the given index to see if value 'v' is present in
-// any, returns true if value is present.
-bool checkRow(board_t *board_ptr, int j, int v)
-{
-    if (!board_ptr)
-    {
-        return false;
-    }
-
-    for (int i = 0; i < board_ptr->size; i++)
-    {
-        int entry = board_ptr->entries[i][j];
-
-        if (entry && entry == v)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-// Checks the columns of the given index to see if value 'v' is present in
-// any, returns true if value is present.
-bool checkColumn(board_t *board_ptr, int i, int v)
-{
-    if (!board_ptr)
-    {
-        return false;
-    }
-
-    for (int j = 0; j < board_ptr->size; j++)
-    {
-        int entry = board_ptr->entries[i][j];
-
-        if (entry && entry == v)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-// Checks the n*n box the entry lives in for value 'v' if present, returns true if so.
-bool checkBox(board_t *board_ptr, int i, int j, int v)
-{
-    if (!board_ptr)
-    {
-        return false;
-    }
-
-    int n = (int)sqrt(board_ptr->size);
-
-    int minX = floor(i / n) * n;
-    int minY = floor(j / n) * n;
-
-    for (int x = minX; x < minX + n; x++)
-    {
-        for (int y = minY; y < minY + n; y++)
-        {
-            int entry = board_ptr->entries[x][y];
-
-            if (entry && entry == v)
-            {
-                return true;
-            }
-        }
-    }
-
-    return false;
 }

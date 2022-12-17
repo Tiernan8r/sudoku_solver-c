@@ -21,10 +21,10 @@
 // SOFTWARE.
 #include <stdio.h>
 #include "entry.h"
-#include "solve.h"
 #include "input.h"
 #include "output.h"
 #include "main.h"
+#include "solve.h"
 
 int main()
 {
