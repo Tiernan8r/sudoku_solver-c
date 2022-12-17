@@ -4,11 +4,12 @@
 #include "entry.h"
 #include "output.h"
 
-char * joint = "+";
+char *joint = "+";
 char rowSeparator[] = "---";
-char * column = "|";
+char *column = "|";
 
-void drawTable(board_t board) {
+void drawTable(board_t board)
+{
     // calculate the amount of memory resuired for the string table:
     // For each row there is an '\n' key, so each is +2 in width.
     // Each entry is 3 chars wide
@@ -19,18 +20,19 @@ void drawTable(board_t board) {
     // total memory required = (2n+1)*(4n+3) = 8n^2+6n+4n+3 = 8n**2 + 10n + 3
     int n = board.size;
     int memorySize = 8 * n * n + 10 * n + 3;
-        
+
     char table[memorySize];
-    memset(table, 0, memorySize*sizeof(char));
+    memset(table, 0, memorySize * sizeof(char));
     table[0];
 
     // Construct the row separator:
     int rowSize = 4 * n + 3;
     char row[rowSize];
-    memset(row, 0, rowSize*sizeof(char));
+    memset(row, 0, rowSize * sizeof(char));
     row[0];
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         strcat(row, joint);
         strcat(row, rowSeparator);
     }
@@ -38,9 +40,11 @@ void drawTable(board_t board) {
     strcat(row, "\n");
 
     // Populate the table string:
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         strcat(table, row);
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < n; j++)
+        {
             strcat(table, column);
             strcat(table, " ");
 
