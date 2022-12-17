@@ -28,16 +28,19 @@
 extern const int BIG_TABLE;
 extern const int SMALL_TABLE;
 
-// Reads the entire file input as follows:
+// Handles reading in the input of the grid:
+void parseTable(char *s, int size, board_t *board_ptr);
+
+// Reads the entire file input into the given board ptr
+// Read as follows:
 // any 0,1,2...9,a...f is read as an entry in the
 // grid, any ' ' chars are empty entries, and '\n' are ignored.
-board_t *read(FILE *f)
+// returns status of read as int: 0 for OK, 1 for BAD
+int read(FILE *f, board_t *board_ptr)
 {
-    if (!f)
+    if (f == NULL)
     {
-        fclose(f);
-
-        return NULL;
+        return 1;
     }
 
     char c;
@@ -61,33 +64,29 @@ board_t *read(FILE *f)
     int tableWidth = (int)sqrt(i);
     if (tableWidth == SMALL_TABLE || tableWidth == BIG_TABLE)
     {
-        return parseTable(chars, i);
+        parseTable(chars, i, board_ptr);
+        return 0;
     }
 
     printf("table width did not match expected dimensions!\n");
     free(chars);
 
-    return NULL;
+    return 1;
 }
 
 // reads the string into the a 2x2 array
-board_t *parseTable(char *s, int size)
+void parseTable(char *s, int size, board_t *board_ptr)
 {
     int w = (int)sqrt(size);
 
-    board_t board = {};
-    board_t *b_ptr = &board;
-
-    board.size = w;
+    board_ptr->size = w;
 
     for (int i = 0; i < w; i++)
     {
         for (int j = 0; j < w; j++)
         {
             char c = s[i * w + j];
-            board.entries[i][j] = fromChar(c);
+            board_ptr->entries[i][j] = fromChar(c);
         }
     }
-
-    return b_ptr;
 }

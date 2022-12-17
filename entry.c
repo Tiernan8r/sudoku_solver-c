@@ -31,14 +31,12 @@ int numChars = 17;
 
 char toChar(int e)
 {
-    char val = ' ';
-
-    if (e <= 0 || e > numChars)
+    if (e <= 0)
     {
-        return val;
+        e = 0;
     }
 
-    return charVals[e];
+    return charVals[e % numChars];
 }
 
 int fromChar(char c)

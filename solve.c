@@ -28,65 +28,61 @@
 #include "check.h"
 #include "solve.h"
 
-extern const int BIG_TABLE;
-extern const int SMALL_TABLE;
+int allOpts[16] = {
+    0x1,
+    0x2,
+    0x3,
+    0x4,
+    0x5,
+    0x6,
+    0x7,
+    0x8,
+    0x9,
+    0xa,
+    0xb,
+    0xc,
+    0xd,
+    0xe,
+    0xf,
+};
 
-const int T = true;
-const int F = false;
+void populateOptions(solve_t *solve_ptr);
+void solveEntries(solve_t *solve_ptr);
 
-board_t solve(board_t board)
+void solve(board_t *board_ptr)
 {
-    // 1. populate intial options
+    if (board_ptr == NULL)
+    {
+        return;
+    }
+
+    bool solvable = true;
+    solve_t solve = {};
+    solve.board_ptr = board_ptr;
+    solve_t *solve_ptr = &solve;
+
+    // 1. populate initial options
     // 2. eliminate/solve entries with only 1 option
     //      if none -> exit
     // 3. recalculate options
     // 4. repeat #2->#3 until all solved.
-    bool solvable = true;
-
     do
     {
-        solve_t *s_ptr = populateOptions(&board, solvable);
+        // Calculate option values on tiles from solved for entries
+        populateOptions(solve_ptr);
+        // Try solve entries based off of available options
+        solveEntries(solve_ptr);
 
-        solveEntries(s_ptr);
-
-        solvable = s_ptr->solvable;
+        solvable = solve_ptr->solvable;
     } while (solvable);
-
-    return board;
 }
 
 // Fills out the options arrays in each board entry, based on the solved values in the
 // board.
-solve_t *populateOptions(board_t *board_ptr, bool solvable)
+void populateOptions(solve_t *solve_ptr)
 {
-    solvable = false;
-    if (!board_ptr)
-    {
-        return NULL;
-    }
-
-    int n = board_ptr->size;
-    int allOpts[16] = {
-        0x1,
-        0x2,
-        0x3,
-        0x4,
-        0x5,
-        0x6,
-        0x7,
-        0x8,
-        0x9,
-        0xa,
-        0xb,
-        0xc,
-        0xd,
-        0xe,
-        0xf,
-        0xf1,
-    };
-
-    solve_t solver = {};
-    solve_t *s_ptr = &solver;
+    bool solvable = false;
+    int n = solve_ptr->board_ptr->size;
 
     // clear all options initially:
     for (int i = 0; i < n; i++)
@@ -95,7 +91,7 @@ solve_t *populateOptions(board_t *board_ptr, bool solvable)
         {
             for (int k = 0; k < n; k++)
             {
-                solver.opts.opts[i][j][k] = 0;
+                solve_ptr->opts.opts[i][j][k] = 0;
             }
         }
     }
@@ -104,7 +100,7 @@ solve_t *populateOptions(board_t *board_ptr, bool solvable)
     {
         for (int j = 0; j < n; j++)
         {
-            int e = board_ptr->entries[i][j];
+            int e = solve_ptr->board_ptr->entries[i][j];
 
             // Any non-zero value is considered solved...
             if (e)
@@ -120,13 +116,13 @@ solve_t *populateOptions(board_t *board_ptr, bool solvable)
             {
                 int opt = allOpts[k];
 
-                bool rowPresent = checkRow(board_ptr, j, opt);
-                bool columnPresent = checkColumn(board_ptr, i, opt);
-                bool boxPresent = checkBox(board_ptr, i, j, opt);
+                bool rowPresent = checkRow(solve_ptr->board_ptr, j, opt);
+                bool columnPresent = checkColumn(solve_ptr->board_ptr, i, opt);
+                bool boxPresent = checkBox(solve_ptr->board_ptr, i, j, opt);
 
                 if (!rowPresent && !columnPresent && !boxPresent)
                 {
-                    solver.opts.opts[i][j][count] = opt;
+                    solve_ptr->opts.opts[i][j][count] = opt;
                     count++;
                 }
             }
@@ -142,10 +138,7 @@ solve_t *populateOptions(board_t *board_ptr, bool solvable)
         }
     }
 
-    solver.board_ptr = board_ptr;
-    solver.solvable = solvable;
-
-    return s_ptr;
+    solve_ptr->solvable = solvable;
 }
 
 // Finds any entries with only one option and marks the entry as solved.

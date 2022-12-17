@@ -20,183 +20,85 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "entry.h"
 #include "input.h"
 #include "output.h"
 #include "main.h"
 #include "solve.h"
 
-int main()
+char *program_name;
+FILE *input_file = NULL;
+board_t *board_ptr = NULL;
+
+void usage(void);
+
+void usage(void)
 {
+    printf("%s - Solves a given sudoku grid.\n", program_name);
+    printf("USAGE:\n\n");
+    printf("%s [flags] <file>\n\n", program_name);
+    printf("FLAGS:\n\n");
+    printf("-h/--help:      Display this message.\n");
+    printf("\n");
+    printf("VALUES:\n\n");
+    printf("<file>:         The file to read for board input, defaults to stdin if unset.\n");
+
+    exit(1);
+}
+
+int main(int argc, char *argv[])
+{
+    input_file = stdin;
+    program_name = &argv[0][0];
+
+    char *input_file_name;
+
+    while (argc > 1)
+    {
+        if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)
+        {
+            usage();
+        }
+        if (argv[1][0] == '-')
+        {
+            printf("Unrecognised flag '%s'\n", argv[1]);
+            usage();
+        }
+        else
+        {
+            input_file_name = &argv[1][0];
+            input_file = fopen(input_file_name, "r");
+
+            if (input_file == NULL)
+            {
+                fprintf(stderr, "Unable to open file '%s' for reading\n", input_file_name);
+            }
+            break;
+        }
+        --argc;
+        ++argv;
+    }
+
     // Read in the input
-    printf("READING INPUT:\n");
-    board_t *b_ptr = read(stdin);
-    if (!b_ptr)
+    printf("READING INPUT...\n");
+    board_t board = {};
+    board_ptr = &board;
+    int status = read(input_file, board_ptr);
+    if (status)
     {
         return 1;
     }
 
-    board_t b = *b_ptr;
-    // Calculate options for each entry
-
-    // solve
-
-    // output
-    // board_t b = makeEmptyBoard(9);
-    // board_t b = testBoard();
-    // b_ptr = testBoard();
-
     printf("INPUT:\n");
-    drawTable(b);
+    drawTable(board);
 
     printf("SOLVING...\n");
-    b = solve(b);
+    solve(board_ptr);
 
     printf("OUTPUT:\n");
-    drawTable(b);
+    drawTable(board);
 
     return 0;
-}
-
-board_t *testBoard()
-{
-    // make a test 9*9 board:
-    //   0   1   2   3   4   5   6   7   8
-    // +---+---+---+---+---+---+---+---+---+
-    // | 6 | 4 |   |   | 3 |   |   |   | 7 | 0
-    // +---+---+---+---+---+---+---+---+---+
-    // | 5 |   | 1 |   | 7 |   | 9 |   |   | 1
-    // +---+---+---+---+---+---+---+---+---+
-    // |   |   |   |   |   |   |   | 1 |   | 2
-    // +---+---+---+---+---+---+---+---+---+
-    // |   |   | 4 | 9 |   | 8 |   | 6 |   | 3
-    // +---+---+---+---+---+---+---+---+---+
-    // |   | 8 |   |   |   | 3 |   | 2 |   | 4
-    // +---+---+---+---+---+---+---+---+---+
-    // |   |   |   | 4 |   |   |   |   |   | 5
-    // +---+---+---+---+---+---+---+---+---+
-    // | 4 |   |   | 1 | 5 | 7 |   | 3 |   | 6
-    // +---+---+---+---+---+---+---+---+---+
-    // | 2 |   | 8 | 3 |   |   |   | 4 |   | 7
-    // +---+---+---+---+---+---+---+---+---+
-    // | 7 | 5 |   |   |   |   |   | 9 | 6 | 8
-    // +---+---+---+---+---+---+---+---+---+
-    board_t b = {
-        {
-            // row 0:
-            {
-                6,
-                4,
-                0,
-                0,
-                3,
-                0,
-                0,
-                0,
-                7,
-            },
-            // row 1:
-            {
-                5,
-                0,
-                1,
-                0,
-                7,
-                0,
-                9,
-                0,
-                0,
-            },
-            // row 2:
-            {
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-            },
-            // row 3
-            {
-                0,
-                0,
-                4,
-                9,
-                0,
-                8,
-                0,
-                6,
-                0,
-            },
-            // row 4
-            {
-                0,
-                8,
-                0,
-                0,
-                0,
-                3,
-                0,
-                2,
-                0,
-            },
-            // row 5
-            {
-                0,
-                0,
-                0,
-                4,
-                0,
-                0,
-                0,
-                0,
-                0,
-            },
-            // row 6:
-            {
-                4,
-                0,
-                0,
-                1,
-                5,
-                7,
-                0,
-                3,
-                0,
-            },
-            // row 7
-            {
-                2,
-                0,
-                8,
-                3,
-                0,
-                0,
-                0,
-                4,
-                0,
-            },
-            // row 8
-            {
-                7,
-                5,
-                0,
-                0,
-                0,
-                0,
-                0,
-                9,
-                6,
-            },
-        },
-        9,
-    };
-
-    board_t *b_ptr = &b;
-    return b_ptr;
-
-    // return b;
 }

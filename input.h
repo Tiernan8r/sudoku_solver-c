@@ -24,7 +24,5 @@
 
     #include <stdio.h>
 
-    board_t* read(FILE *f);
-    // Handles reading in the input of the grid:
-    board_t *parseTable(char *s, int size);
+    int read(FILE *f, board_t *board_ptr);
 #endif

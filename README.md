@@ -12,7 +12,29 @@ $ make
 
 ### Running:
 
-The compiled binary reads from stdin (no redirecting implemented at this time...), input is encoded simply as follows:
+Once the binary is compiled, it can be run with
+```console
+$ ./solver
+```
+
+The help message gives an overview of it's usage:
+```console
+$ ./solver --help
+./solver - Solves a given sudoku grid.
+USAGE:
+
+./solver [flags] <file>
+
+FLAGS:
+
+-h/--help:      Display this message.
+
+VALUES:
+
+<file>:         The file to read for board input, defaults to stdin if unset.
+```
+
+The input needs to be encoded as follows:
 * '\n' and 'EOF' characters are ignore as input, the reading ends on an 'EOF'.
 * ' ' is interpreted as an empty cell.
 * For a 9x9 sudoku grid, 1-9 are interpreted as cell values.
@@ -56,9 +78,9 @@ Is interpreted as the cells:
 ```
 
 ```console
-$ ./solver < example_input/test_input3.txt
-
-READING INPUT:
+$ ./solver example_input/test_input
+3.txt
+READING INPUT...
 INPUT:
 +---+---+---+---+---+---+---+---+---+
 | 7 | 6 |   | 1 |   | 9 |   | 3 | 8 |

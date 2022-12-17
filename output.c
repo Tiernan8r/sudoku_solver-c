@@ -25,7 +25,7 @@
 #include "output.h"
 
 char *joint = "+";
-char rowSeparator[] = "---";
+char *rowSeparator = "---";
 char *column = "|";
 
 // Displays the board as a table

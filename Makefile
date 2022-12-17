@@ -9,7 +9,7 @@ CC=gcc
 
 all: $(TARGET)
 
-clear:
+clean:
 	${RM} ${TARGET}
 
 $(TARGET): ${SRC}

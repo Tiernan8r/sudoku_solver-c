@@ -19,21 +19,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef SOLVE_H
-    #define SOLVE_H
+#ifndef DEBUG_H
+    #define DEBUG_H
 
-    #include <stdbool.h>
     #include "entry.h"
 
-    typedef struct {
-        int opts[16][16][16];
-    } options_t;
+    board_t *testBoard();
 
-    typedef struct {
-        board_t *board_ptr;
-        options_t opts;
-        bool solvable;
-    } solve_t;
-
-    void solve(board_t *board_ptr);
 #endif
