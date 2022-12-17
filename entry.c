@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <strings.h>
 #include "entry.h"
 
 const int SMALL_TABLE = 9;

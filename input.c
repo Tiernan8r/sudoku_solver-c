@@ -1,5 +1,8 @@
 // Handles reading in the input of the grid:
-
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "entry.h"
 #include "input.h"
 
 extern const int BIG_TABLE;

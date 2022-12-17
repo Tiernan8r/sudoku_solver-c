@@ -1,4 +1,7 @@
 // Displays the board as a table
+#include <stdio.h>
+#include <string.h>
+#include "entry.h"
 #include "output.h"
 
 char * joint = "+";

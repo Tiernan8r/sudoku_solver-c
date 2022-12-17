@@ -1,11 +1,7 @@
 #ifndef SOLVE_H
     #define SOLVE_H
 
-    #include <math.h>
     #include <stdbool.h>
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
     #include "entry.h"
 
     typedef struct {
