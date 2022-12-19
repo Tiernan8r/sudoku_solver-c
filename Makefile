@@ -57,6 +57,6 @@ test:
 
 -include $(DEPS)
 
-.PHONY: clean all
+.PHONY: clean test all
 
 
