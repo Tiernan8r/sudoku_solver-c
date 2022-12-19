@@ -1,5 +1,7 @@
 # Sudoku Solver:
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Tiernan8r_sudoku_solver-c&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Tiernan8r_sudoku_solver-c)
+
 A simple CLI based sudoku solver, written in C.
 
 ### Compilation:
