@@ -43,7 +43,7 @@ int read(FILE *f, board_t *board_ptr)
         return 1;
     }
 
-    char c;
+    char c = ' ';
     int i = 0;
     char *chars = malloc(BIG_TABLE * BIG_TABLE * sizeof(char));
 

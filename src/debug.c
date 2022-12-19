@@ -22,7 +22,7 @@
 #include "entry.h"
 #include "debug.h"
 
-board_t *testBoard()
+board_t testBoard()
 {
     // make a test 9*9 board:
     //   0   1   2   3   4   5   6   7   8
@@ -159,6 +159,5 @@ board_t *testBoard()
         9,
     };
 
-    board_t *b_ptr = &b;
-    return b_ptr;
+    return b;
 }

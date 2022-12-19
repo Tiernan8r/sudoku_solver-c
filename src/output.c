@@ -44,13 +44,11 @@ void drawTable(board_t board)
 
     char table[memorySize];
     memset(table, 0, memorySize * sizeof(char));
-    table[0];
 
     // Construct the row separator:
     int rowSize = 4 * n + 3;
     char row[rowSize];
     memset(row, 0, rowSize * sizeof(char));
-    row[0];
 
     for (int i = 0; i < n; i++)
     {

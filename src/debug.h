@@ -24,6 +24,6 @@
 
     #include "entry.h"
 
-    board_t *testBoard();
+    board_t testBoard();
 
 #endif
