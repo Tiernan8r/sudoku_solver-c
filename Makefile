@@ -52,6 +52,8 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c*
 	-e '/^$$/ d' -e 's/$$/ :/' < $(@:.o=.td) >> $(@:.o=.d); 
 	@rm -f $(@:.o=.td)
 
+test:
+	make -f Makefile.test
 
 -include $(DEPS)
 
