@@ -53,3 +53,10 @@ dkms.conf
 
 # Testing files:
 *.td
+build/results/*.txt
+
+# Compiled binaries:
+bin/
+
+# Project files:
+.vscode/
