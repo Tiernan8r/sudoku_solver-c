@@ -23,6 +23,7 @@
     # define INPUT_H
 
     #include <stdio.h>
+    #include "entry.h"
 
     int read(FILE *f, board_t *board_ptr);
 #endif
