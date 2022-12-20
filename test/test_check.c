@@ -29,6 +29,18 @@ void tearDown(void) {} /* Is run after every test, put unit clean-up calls here.
 
 void test_checkRow(void)
 {
+    // Simple check on full row:
+    board_t testBoard = {
+        {
+            {1, 2, 3, 4, 5, 6, 7, 8, 9},
+        },
+        9,
+    };
+
+    for (int i = 1; i < 10; ++i)
+    {
+        TEST_ASSERT_EQUAL_TRUE(checkRow(&testBoard, 0, i));
+    }
 }
 
 void test_checkColumn(void)
