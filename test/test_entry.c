@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 #include "entry.h"
-#include "debug.h"
 #include "unity.h"
 
 void setUp(void) {}    /* Is run before every test, put unit init calls here. */
@@ -38,7 +37,8 @@ int main(void)
 {
     UNITY_BEGIN();
 
-    RUN_TEST(test_testBoard);
+    RUN_TEST(test_toChar);
+    RUN_TEST(test_fromChar);
 
     return UNITY_END();
 }
